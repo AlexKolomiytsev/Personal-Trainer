@@ -30,12 +30,28 @@ config(function ($routeProvider, $sceDelegateProvider) {
     $routeProvider.when('/builder/workouts/new', {
         templateUrl: 'partials/workoutbuilder/workout.html',
         leftNav: 'partials/workoutbuilder/left-nav-exercises.html',
-        topNav: 'partials/workoutbuilder/top-nav.html'
+        topNav: 'partials/workoutbuilder/top-nav.html',
+        controller: 'WorkoutDetailController',
+        resolve: {
+            selectedWorkout: ['WorkoutBuilderService', function (WorkoutBuilderService) {
+                return WorkoutBuilderService.startBuilding();
+            }]
+        }
     });
     $routeProvider.when('/builder/workouts/:id', {
         templateUrl: 'partials/workoutbuilder/workout.html',
         leftNav: 'partials/workoutbuilder/left-nav-exercises.html',
-        topNav: 'partials/workoutbuilder/top-nav.html'
+        topNav: 'partials/workoutbuilder/top-nav.html',
+        controller: 'WorkoutDetailController',
+        resolve: {
+            selectedWorkout: ['WorkoutBuilderService', '$route', '$location', function (WorkoutBuilderService, $route, $location) {
+                var workout = WorkoutBuilderService.startBuilding($route.current.params.id);
+                if (!workout) {
+                    $location.path('/builder/workouts');
+                }
+                return workout;
+            }]
+        }
     });
     $routeProvider.when('/builder/exercises/new', {
         templateUrl: 'partials/workoutbuilder/exercise.html'

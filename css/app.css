@@ -11,7 +11,6 @@ body {
     font-family: 'Roboto Slab';
     font-style: normal;
     font-weight: 400;
-    overflow-x: hidden;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
@@ -56,9 +55,9 @@ input[type="checkbox"].input-validation-error {
     background-color: #0088dc !important;
     height:43px;
 }
-    .navbar-default .second-top-nav a {
-        color: white !important;
-    }
+.navbar-default .second-top-nav a {
+    color: white !important;
+}
 .navbar-default.top-navbar h1 {
     color: white;
     margin-top: 15px;
@@ -133,13 +132,13 @@ input[type="checkbox"].input-validation-error {
     width:100%;
     height:100%;
     opacity:0;      /*Comment this line to try our mouse event based pause and resume. */
-    z-index:10; 
- 
+    z-index:10;
+
 }
 
 /*Comment this style to try our mouse event based pause and resume. */
 #pause-overlay:hover {
-    opacity:.8;     
+    opacity:.8;
 }
 #pause-overlay .pause{
     font-size:120pt;
@@ -148,22 +147,22 @@ input[type="checkbox"].input-validation-error {
     color:#4eaded;
 }
 .absolute-center {
-  margin: auto;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
 }
 
 #play-video-overlay {
-    position:absolute;  
+    position:absolute;
     top:0px;
     width:100%;
     height:100%;
     opacity:0;
-    z-index:10; 
- 
+    z-index:10;
+
 }
 #play-video-overlay:hover {
-    opacity:.6;     
+    opacity:.6;
 }
 #play-video-overlay .video {
     font-size:80pt;
@@ -175,10 +174,8 @@ input[type="checkbox"].input-validation-error {
 
 /*Animation effects workout*/
 div[ng-view] {
-    /*position: absolute;
-    width: 100%;
-    height: 100%;*/
     opacity: 1;
+    display: block;
 }
 div[ng-view].ng-enter,
 div[ng-view].ng-leave {
@@ -188,22 +185,18 @@ div[ng-view].ng-leave {
     transition: all 1s ease;
 }
 div[ng-view].ng-enter {
-    /*left: 100%;*/     /*initial css for view transition in*/
+    opacity: 0;     /*initial css for view transition in*/
     display: block;
-    opacity: 0;
 }
 div[ng-view].ng-leave {
-    /*left: 0%;*/        /*initial css for view transition out*/
+    opacity: 1;        /*initial css for view transition out*/
     display: none;
-    opacity: 0;
 }
 div[ng-view].ng-enter-active {
-    /*left: 0%;*/        /*final css for view transition in*/
-    opacity: 1;
+    opacity: 1;/*final css for view transition in*/
 }
 div[ng-view].ng-leave-active {
-    /*left: -100%;*/    /*final css for view transition out*/
-    opacity: 0;
+    opacity: 0;    /*final css for view transition out*/
 }
 
 .video-image.ng-enter,
@@ -249,32 +242,39 @@ div[ng-view].ng-leave-active {
 
 /*styles for tile - start*/
 .exercise.tile {
-    padding: 10px;
+    width:320px;
+    height:226px;
+    color:white;
     margin-bottom:10px;
-    width:370px;
-    height:240px;
+    background:#61b9ff;
+
 }
-.exercise.tile:nth-child(n){
-    background-color:#02c69a;
+
+.exercise.tile .title {
+    width:inherit;
+    background:#9d4a9c;
+    font-size:14pt;
+    padding:5px;
 }
-.exercise.tile div{
+.exercise.tile .index{
+    width:40px;
     float:left;
+    font-size:20pt;
+    text-align:center;
+    padding-top:10px;
 }
-.exercise.tile div:first-child{
-    width:50px;
-    font-size: 40px;
-}
-.exercise.tile div:nth-child(2){
-    width:245px;
-}
-.exercise.tile div:nth-child(2) input{
-    display:block;
-}
-.exercise.tile div:nth-child(2) div{
-    margin:10px 0px 10px 0px;
-}
-.exercise.tile div:last-child{
+.exercise.tile .order{
     width:53px;
+    float:right;
+}
+.exercise.tile .main {
+    width:225px;
+    float:left;
+    padding:4px;
+}
+.exercise.tile img{
+    width:100%;
+    height:120px;
 }
 
 .workout.tile {
@@ -312,3 +312,8 @@ div[ng-view].ng-leave-active {
     background:#1D89CF;
 }
 /*styles for tile- end*/
+
+.select-duration {
+    color:rgb(51,51,51);
+    margin-top:2px;
+}

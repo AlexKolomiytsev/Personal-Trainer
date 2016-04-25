@@ -1,9 +1,12 @@
 'use strict';
 
 angular.module('WorkoutBuilder')
-  .controller('ExercisesNavController', ['$scope', 'WorkoutService', function ($scope, WorkoutService) {
+  .controller('ExercisesNavController', ['$scope', 'WorkoutService', 'WorkoutBuilderService', function ($scope, WorkoutService, WorkoutBuilderService) {
       var init = function () {
           $scope.exercises = WorkoutService.getExercises();
+          $scope.addExercise = function (exercise) {
+              WorkoutBuilderService.addExercise(exercise);
+          }
       };
       init();
   }]);
