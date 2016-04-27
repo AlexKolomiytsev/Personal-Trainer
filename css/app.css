@@ -317,3 +317,8 @@ div[ng-view].ng-leave-active {
     color:rgb(51,51,51);
     margin-top:2px;
 }
+/*
+
+input.ng-invalid {
+    border: 1px solid red;
+}*/
