@@ -20,6 +20,34 @@ angular.module('app')
             return workouts;
         };
 
+        service.updateWorkout = function (workout) {
+            var workoutIndex;
+            for (var i = 0; i < workouts.length; i++) {
+                if (workouts[i].name === workout.name) {
+                    workouts[i] = workout;
+                    break;
+                }
+            }
+            return workout;
+        };
+
+        service.addWorkout = function (workout) {
+            if (workout.name) {
+                workouts.push(workout);
+                return workout;
+            }
+        };
+        
+        service.deleteWorkout = function (workoutName) {
+            var workoutIndex;
+            angular.forEach(workouts, function (w, index) {
+                if (w.name === workoutName) {
+                    workoutIndex = index;
+                }
+            });
+            workouts.splice(workoutIndex, 1);
+        };
+
         var setupInitialExercises = function () {
             exercises.push(
                 new Exercise({
@@ -252,7 +280,7 @@ angular.module('app')
         service.getWorkout = function (name) {
             var result = null;
             angular.forEach(service.getWorkouts(), function (workout) {
-                if (workout.name === name) result = workout;
+                if (workout.name === name) result = angular.copy(workout);
             });
             return result;
         };

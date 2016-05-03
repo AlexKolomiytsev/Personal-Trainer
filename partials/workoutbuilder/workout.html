@@ -5,27 +5,30 @@
         </h2>
     </div>
     <form class="row" name="formWorkout" novalidate>
-        <div id="exercises-list" class="col-sm-5 col-sm-offset-1">
+        <div id="exercises-list" class="col-sm-4 col-sm-offset-1">
             <span name="exerciseCount" ng-model="workout.exercises.length"></span>
-            <div class="alert alert-danger" ng-show="formWorkout.exerciseCount.$dirty && formWorkout.exerciseCount.$error.count">
+            <div class="alert alert-danger" ng-show="hasError(formWorkout.exerciseCount, formWorkout.exerciseCount.$error.count)">
                 The workout should have at least one exercise!
             </div>
-            <div ng-repeat="exercise in workout.exercises" class="exercise-item">
+            <div ng-repeat="exercise in workout.exercises" class="exercise-item" ng-click="selected.exercise=exercise">
                 <div ng-include="'workout-exercise-tile'"></div>
             </div>
+        </div>
+        <div id="exercise-description" class="col-sm-1">
+            {{selected.exercise.details.description}}
         </div>
         <div id="workout-data" class="col-sm-3">
             <div class="form-group row" ng-class="{'has-error':formWorkout.workoutName.$invalid}">
                 <label for="workout-name">Name:</label>
                 <input type="text" name="workoutName" class="form-control" id="workout-name" placeholder="Enter workout name. Must be unique." ng-model="workout.name" ng-pattern="/^[A-Za-z0-9]{1,15}$/" required>
-                <label ng-show="formWorkout.workoutName.$dirty && formWorkout.workoutName.$error.required" class="text-danger">Workout name is required and it should be unique.</label>
-                <label ng-show="formWorkout.workoutName.$dirty && formWorkout.workoutName.$error.pattern" class="text-danger">Only alpha numberic values are allowed in workout name with max length 15.</label>
+                <label ng-show="hasError(formWorkout.workoutName, formWorkout.workoutName.$error.required)" class="text-danger">Workout name is required and it should be unique.</label>
+                <label ng-show="hasError(formWorkout.workoutName, formWorkout.workoutName.$error.pattern)" class="text-danger">Only alpha numberic values are allowed in workout name with max length 15.</label>
             </div>
             <div class="form-group row" ng-class="{'has-error':formWorkout.title.$invalid}">
                 <label for="workout-title">Title:</label>
                 <input type="text" name="title" class="form-control" id="workout-title" placeholder="What would be the workout title?" ng-model="workout.title" ng-minlength="5" ng-maxlength="20" required>
-                <label ng-show="formWorkout.title.$dirty && formWorkout.title.$error.required" class="text-danger">Workout title is required.</label>
-                <label ng-show="formWorkout.title.$dirty && (formWorkout.title.$error.minlength || formWorkout.title.$error.maxlength)" class="text-danger">Title should be between 5 to 20 character long.</label>
+                <label ng-show="hasError(formWorkout.title, formWorkout.workoutName.$error.required)" class="text-danger">Workout title is required.</label>
+                <label ng-show="hasError(formWorkout.title, (formWorkout.title.$error.minlength || formWorkout.title.$error.maxlength))" class="text-danger">Title should be between 5 to 20 character long.</label>
             </div>
             <div class="form-group row">
                 <label for="workout-description">Description:</label>
@@ -38,7 +41,7 @@
                 <label ng-show="formWorkout.restBetweenExercise.$dirty && formWorkout.restBetweenExercise.$error.number" class="text-danger">Time duration should be numeric.</label>
                 <label ng-show="formWorkout.restBetweenExercise.$dirty && formWorkout.restBetweenExercise.$error.min" class="text-danger">Only positive integer value allowed.</label>
                 <label ng-show="formWorkout.restBetweenExercise.$dirty && formWorkout.restBetweenExercise.$error.pattern" class="text-danger">Only integer value allowed.</label>-->
-                <div ng-messages="formWorkout.restBetweenExercise.$error" ng-if="formWorkout.restBetweenExercise.$dirty">
+                <div ng-messages="formWorkout.restBetweenExercise.$error" ng-if="hasError(formWorkout.restBetweenExercise)">
                     <label ng-message="required" class="text-danger">Time duration is required.</label>
                     <label ng-message="number" class="text-danger">Time duration should be numeric.</label>
                     <label ng-message="min" class="text-danger">Only positive integer value allowed.</label>
@@ -56,6 +59,7 @@
             <div class="row">
                 <button class="btn pull-right btn-block" ng-class="{'btn-default':formWorkout.$valid,'btn-warning':!formWorkout.$valid}" ng-click="save()"
                         popover="{{formWorkout.$invalid ? 'The form has errors.' : null}}" popover-trigger="mouseenter">Save</button>
+                <button class="btn btn-primary pull-right" ng-click="reset()">Reset</button>
             </div>
         </div>
     </form>
@@ -72,8 +76,12 @@
                 <img ng-src="{{exercise.details.image ? exercise.details.image : '/img/running.png'}}"/>
             </div>
             <div class="details">
-                <select class="select-duration form-control" name="duration" ng-model="exercise.duration" ng-options="duration.value as duration.title for duration in durations">
-                </select>
+                <ng-form name="formDuration">
+                    <select class="select-duration form-control" name="duration" ng-model="exercise.duration" ng-options="duration.value as duration.title for duration in durations" required>
+                        <option value="">Select Duration</option>
+                    </select>
+                    <label ng-show="hasError(formDuration.duration, formDuration.duration.$error.required)" class="text-danger">Time Duration is required</label>
+                </ng-form>
             </div>
         </div>
         <div class="order">

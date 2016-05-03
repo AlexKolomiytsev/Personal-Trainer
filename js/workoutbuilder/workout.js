@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('WorkoutBuilder')
-  .controller('WorkoutListController', ['$scope', 'WorkoutService', '$location', function ($scope, WorkoutService, $location) {
+  .controller('WorkoutListController', ['$scope', 'WorkoutService', '$location', '$routeParams', function ($scope, WorkoutService, $location, $routeParams) {
       $scope.goto = function (workout) {
           $location.path('/builder/workouts/' + workout.name);
       }
@@ -12,8 +12,13 @@ angular.module('WorkoutBuilder')
   }]);
 
 angular.module('WorkoutBuilder')
-    .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout',
-        function ($scope, WorkoutBuilderService, selectedWorkout) {
+    .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout', '$location', '$routeParams',
+        function ($scope, WorkoutBuilderService, selectedWorkout, $location, $routeParams) {
+            
+            $scope.selected = {};
+            
+            
+            
             $scope.removeExercise = function (exercise) {
                 WorkoutBuilderService.removeExercise(exercise);
             };
@@ -57,6 +62,26 @@ angular.module('WorkoutBuilder')
                }
             });*/
 
+            $scope.save = function () {
+                $scope.submitted = true;
+                if($scope.formWorkout.$invalid) return;
+
+                $scope.workout = WorkoutBuilderService.save();
+                $scope.formWorkout.$setPristine();
+
+                $scope.submitted = false;
+            };
+
+            $scope.hasError = function (modelController, error) {
+                return (modelController.$dirty || $scope.submitted) && error;
+            };
+
+            $scope.reset = function () {
+                $scope.workout = WorkoutBuilderService.startBuilding($routeParams.id);
+                $scope.formWorkout.$setPristine();
+                $scope.submitted;
+            }
+
             $scope.$watch('formWorkout.exerciseCount', function (newValue) {
                if(newValue) {
                    newValue.$setValidity("count", $scope.workout.exercises.length > 0);
@@ -72,6 +97,14 @@ angular.module('WorkoutBuilder')
                     }
                 });
 
+            $scope.canDeleteWorkout = function () {
+                return WorkoutBuilderService.canDeleteWorkout();
+            };
+            $scope.deleteWorkout = function () {
+                WorkoutBuilderService.delete();
+                $location.path('/builder/workouts');
+            };
+            
             var init = function () {
               $scope.workout = selectedWorkout;
             };
