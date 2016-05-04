@@ -6,7 +6,10 @@ angular.module('WorkoutBuilder')
             WorkoutBuilderService.addExercise(exercise);
         }
         var init = function () {
-            $scope.exercises = WorkoutService.getExercises();
+            WorkoutService.getExercises().success(function (data) {
+                $scope.exercises = data;
+            });
+            //$scope.exercises = WorkoutService.getExercises();
         };
         init();
     }]);
@@ -17,7 +20,10 @@ angular.module('WorkoutBuilder')
             $location.path('/builder/exercises/' + exercise.name);
         }
         var init = function () {
-            $scope.exercises = WorkoutService.getExercises();
+            WorkoutService.getExercises().success(function (data) {
+                $scope.exercises = data;
+            });
+            //$scope.exercises = WorkoutService.getExercises();
         };
         init();
     }]);

@@ -7,12 +7,17 @@ angular.module('app')
     });
 
 angular.module('app')
-    .factory("WorkoutService", ['WorkoutPlan', 'Exercise', function (WorkoutPlan, Exercise) {
+    .factory("WorkoutService", ['WorkoutPlan', 'Exercise', '$http', function (WorkoutPlan, Exercise, $http) {
         var service = {};
         var workouts = [];
         var exercises = [];
+        
         service.getExercises = function () {
-            return exercises;
+            var collectionsUrl = 'https://api.mongolab.com/api/1/databases/personaltrainerdb/collections';
+            return $http.get(collectionsUrl + '/exercises', {
+               params: { apiKey: 'dxutsfn8IwNW0usGzQ6nSiOaL4bLCpM1'} //add query string params to the URL
+            });
+            //return exercises;
         };
 
         service.getExercise = function (name) {
@@ -51,7 +56,45 @@ angular.module('app')
 
 
         service.getWorkouts = function () {
-            return workouts;
+            var collectionsUrl = 'https://api.mongolab.com/api/1/databases/personaltrainerdb/collections';
+            return $http.get(collectionsUrl + '/workouts', {
+                params: { apiKey: 'dxutsfn8IwNW0usGzQ6nSiOaL4bLCpM1'} //add query string params to the URL
+            });
+            //return workouts;
+        };
+        service.getWorkout = function (name) {
+            var result = null;
+            angular.forEach(service.getWorkouts(), function (workout) {
+                if (workout.name === name) result = angular.copy(workout);
+            });
+            return result;
+        };
+
+        service.updateWorkout = function (workout) {
+            for (var i = 0; i < workouts.length; i++) {
+                if (workouts[i].name === workout.name) {
+                    workouts[i] = workout;
+                    break;
+                }
+            }
+            return workout;
+        };
+
+        service.addWorkout = function (workout) {
+            if (workout.name) {
+                workouts.push(workout);
+                return workout;
+            }
+        }
+
+        service.deleteWorkout = function (workoutName) {
+            var workoutIndex;
+            angular.forEach(workouts, function (w, index) {
+                if (w.name === workoutName) {
+                    workoutIndex = index;
+                }
+            });
+            workouts.splice(workoutIndex, 1);
         };
 
         var setupInitialExercises = function () {
@@ -284,40 +327,7 @@ angular.module('app')
             workouts.push(workout);
         };
 
-        service.getWorkout = function (name) {
-            var result = null;
-            angular.forEach(service.getWorkouts(), function (workout) {
-                if (workout.name === name) result = angular.copy(workout);
-            });
-            return result;
-        };
-
-        service.updateWorkout = function (workout) {
-            for (var i = 0; i < workouts.length; i++) {
-                if (workouts[i].name === workout.name) {
-                    workouts[i] = workout;
-                    break;
-                }
-            }
-            return workout;
-        };
-
-        service.addWorkout = function (workout) {
-            if (workout.name) {
-                workouts.push(workout);
-                return workout;
-            }
-        }
-
-        service.deleteWorkout = function (workoutName) {
-            var workoutIndex;
-            angular.forEach(workouts, function (w, index) {
-                if (w.name === workoutName) {
-                    workoutIndex = index;
-                }
-            });
-            workouts.splice(workoutIndex, 1);
-        };
+        
 
         var init = function () {
             setupInitialExercises();
