@@ -33,27 +33,71 @@ angular.module('WorkoutBuilder')
             buildingWorkout.exercises.push({ details: exercise, duration: 30 });
         };
 
-        service.moveExerciseTo = function (exercise, toIndex) {
-            if (toIndex < 0 || toIndex >= buildingWorkout.exercises) return;
-            var currentIndex = buildingWorkout.exercises.indexOf(exercise);
-            buildingWorkout.exercises.splice(toIndex, 0, buildingWorkout.exercises.splice(currentIndex, 1)[0]);
-        };
-
         service.save = function () {
-            var workout = newWorkout ? WorkoutService.addWorkout(buildingWorkout) : WorkoutService.updateWorkout(buildingWorkout);
+            var workout = newWorkout ? WorkoutService.addWorkout(buildingWorkout)
+                : WorkoutService.updateWorkout(buildingWorkout);
             newWorkout = false;
             return workout;
         };
 
+        service.moveExerciseTo = function (exercise, toIndex) {
+            if (toIndex < 0 || toIndex >= buildingWorkout.exercises) return;
+            var currentIndex = buildingWorkout.exercises.indexOf(exercise);
+            buildingWorkout.exercises.splice(toIndex, 0, buildingWorkout.exercises.splice(currentIndex, 1)[0]);
+        }
+
         service.canDeleteWorkout = function () {
             return !newWorkout;
-        };
+        }
 
         service.delete = function () {
-            if (newWorkout) return;
+            if (newWorkout) return; // A new workout cannot be deleted.
             WorkoutService.deleteWorkout(buildingWorkout.name);
-        };
+        }
 
         return service;
     }]);
 
+angular.module('WorkoutBuilder')
+    .factory("ExerciseBuilderService", ['WorkoutService', 'Exercise', function (WorkoutService, Exercise) {
+        var service = {};
+        var buildingExercise;
+        var newExercise;
+        service.startBuilding = function (name) {
+            //We are going to edit an existing exercise
+            if (name) {
+                buildingExercise = WorkoutService.getExercise(name);
+                newExercise = false;
+            }
+            else {
+                buildingExercise = new Exercise({});
+                newExercise = true;
+            }
+            return buildingExercise;
+        };
+
+        service.save = function () {
+            var exercise = newExercise ? WorkoutService.addExercise(buildingExercise)
+                : WorkoutService.updateExercise(buildingExercise);
+            newExercise = false;
+            return exercise;
+        };
+
+        service.delete = function () {
+            WorkoutService.deleteExercise(buildingExercise.name);
+        };
+
+        service.addVideo = function () {
+            buildingExercise.related.videos.push("");
+        };
+
+        service.canDeleteExercise = function () {
+            return !newExercise;
+        }
+
+        service.deleteVideo = function (index) {
+            if (index >= 0) buildingExercise.related.videos.splice(index, 1);
+        }
+
+        return service;
+    }]);

@@ -54,10 +54,14 @@ config(function ($routeProvider, $sceDelegateProvider) {
         }
     });
     $routeProvider.when('/builder/exercises/new', {
-        templateUrl: 'partials/workoutbuilder/exercise.html'
+        templateUrl: 'partials/workoutbuilder/exercise.html',
+        controller: 'ExerciseDetailController',
+        topNav: 'partials/workoutbuilder/top-nav.html'
     });
     $routeProvider.when('/builder/exercises/:id', {
-        templateUrl: 'partials/workoutbuilder/exercise.html'
+        templateUrl: 'partials/workoutbuilder/exercise.html',
+        controller: 'ExerciseDetailController',
+        topNav: 'partials/workoutbuilder/top-nav.html'
     });
 
 
