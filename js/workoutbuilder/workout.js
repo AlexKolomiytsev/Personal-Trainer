@@ -7,7 +7,7 @@ angular.module('WorkoutBuilder')
         };
         var init = function () {
             //$scope.workouts = WorkoutService.getWorkouts();
-            WorkoutService.getWorkouts().success(function (data) {
+            WorkoutService.getWorkouts().then(function (data) {
                $scope.workouts = data;
             });
         };
@@ -15,7 +15,7 @@ angular.module('WorkoutBuilder')
     }]);
 
 angular.module('WorkoutBuilder')
-    .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout', '$location', '$routeParams', function ($scope, WorkoutBuilderService, selectedWorkout, $location, $routeParams) {
+    .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout', '$location', '$routeParams', '$q', function ($scope, WorkoutBuilderService, selectedWorkout, $location, $routeParams, $q) {
         $scope.removeExercise = function (exercise) {
             WorkoutBuilderService.removeExercise(exercise);
         };
