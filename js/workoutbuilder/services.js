@@ -13,46 +13,19 @@ angular.module('WorkoutBuilder')
         var buildingWorkout;
         var newWorkout;
         service.startBuilding = function (name) {
-            //---------------------------------------------------
-            /*//We are going to edit an existing workout
-            if (name) {
-                buildingWorkout = WorkoutService.getWorkout(name);
-                newWorkout = false;
-            }
-            else {
-                buildingWorkout = new WorkoutPlan({});
-                newWorkout = true;
-            }
-            return buildingWorkout;*/
-            //---------------------------------------------------
-           /* var defer = $q.defer();
-            if(name) {
-                WorkoutService.getWorkout(name).then(function (workout) {
-                    buildingWorkout = workout;
-                    newWorkout = false;
-                    defer.resolve(buildingWorkout);
-                });
-            }
-            else {
-                buildingWorkout = new WorkoutPlan({});
-                defer.resolve(buildingWorkout);
-                newWorkout = true;
-            }
-            return defer.promise;*/
-            //---------------------------------------------------
+            //We are going to edit an existing workout
             if (name) {
                 return WorkoutService.getWorkout(name).then(function (workout) {
                     buildingWorkout = workout;
                     newWorkout = false;
                     return buildingWorkout;
-                })
+                });
             }
             else {
                 buildingWorkout = new WorkoutPlan({});
                 newWorkout = true;
                 return $q.when(buildingWorkout);
             }
-
         };
 
         service.removeExercise = function (exercise) {
@@ -63,15 +36,9 @@ angular.module('WorkoutBuilder')
             buildingWorkout.exercises.push({ details: exercise, duration: 30 });
         };
 
-        /*service.save = function () {
-            var workout = newWorkout ? WorkoutService.addWorkout(buildingWorkout)
-                : WorkoutService.updateWorkout(buildingWorkout);
-            newWorkout = false;
-            return workout;
-        };*/
-
         service.save = function () {
-            var promise = newWorkout ? WorkoutService.addWorkout(buildingWorkout) : WorkoutService.updateWorkout(buildingWorkout);
+            var promise = newWorkout ? WorkoutService.addWorkout(buildingWorkout)
+                : WorkoutService.updateWorkout(buildingWorkout);
             promise.then(function (workout) {
                 newWorkout = false;
             });
@@ -82,62 +49,51 @@ angular.module('WorkoutBuilder')
             if (toIndex < 0 || toIndex >= buildingWorkout.exercises) return;
             var currentIndex = buildingWorkout.exercises.indexOf(exercise);
             buildingWorkout.exercises.splice(toIndex, 0, buildingWorkout.exercises.splice(currentIndex, 1)[0]);
-        };
+        }
 
         service.canDeleteWorkout = function () {
             return !newWorkout;
-        };
+        }
 
         service.delete = function () {
             if (newWorkout) return; // A new workout cannot be deleted.
             return WorkoutService.deleteWorkout(buildingWorkout.name);
-        };
+        }
 
         return service;
     }]);
 
 angular.module('WorkoutBuilder')
-    .factory("ExerciseBuilderService", ['WorkoutService', 'Exercise', '$q' , function (WorkoutService, Exercise, $q) {
+    .factory("ExerciseBuilderService", ['WorkoutService', 'Exercise', '$q', function (WorkoutService, Exercise, $q) {
         var service = {};
         var buildingExercise;
         var newExercise;
         service.startBuilding = function (name) {
-            /*//We are going to edit an existing exercise
+            //We are going to edit an existing exercise
             if (name) {
-                buildingExercise = WorkoutService.getExercise(name);
-                newExercise = false;
-            }
-            else {
-                buildingExercise = new Exercise({});
-                newExercise = true;
-            }
-            return buildingExercise;*/
-
-            var defer = $q.defer();
-            if (name) {
-                WorkoutService.getExercise(name).then(function (exercise) {
-                    buildingExercise = exercise;
+                buildingExercise = WorkoutService.Exercises.get({ id: name }, function (data) {
                     newExercise = false;
-                    defer.resolve(buildingExercise);
                 });
             }
             else {
                 buildingExercise = new Exercise({});
-                defer.resolve(buildingExercise);
                 newExercise = true;
             }
-            return defer.promise;
+            return buildingExercise;
         };
 
         service.save = function () {
-            var exercise = newExercise ? WorkoutService.addExercise(buildingExercise)
-                : WorkoutService.updateExercise(buildingExercise);
-            newExercise = false;
-            return exercise;
+            if (!buildingExercise._id) buildingExercise._id = buildingExercise.name;
+            var promise = newExercise ? WorkoutService.Exercises.save({}, buildingExercise).$promise
+                : buildingExercise.$update({ id: buildingExercise.name });
+            return promise.then(function (data) {
+                newExercise = false;
+                return buildingExercise;
+            });
         };
 
         service.delete = function () {
-            WorkoutService.deleteExercise(buildingExercise.name);
+            return buildingExercise.$delete({ id: buildingExercise.name });
         };
 
         service.addVideo = function () {

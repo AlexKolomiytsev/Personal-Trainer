@@ -7,6 +7,7 @@ config(function ($routeProvider, $sceDelegateProvider, WorkoutServiceProvider) {
     // IMPORTANT: Set the database name and API Key here before running the application
     WorkoutServiceProvider.configure("personaltrainerdb", "dxutsfn8IwNW0usGzQ6nSiOaL4bLCpM1");
 
+
     $routeProvider.when('/start', { templateUrl: 'partials/start.html' });
     $routeProvider.when('/workout', { templateUrl: 'partials/workout.html', controller: 'WorkoutController' });
     $routeProvider.when('/finish', { templateUrl: 'partials/finish.html' });
@@ -45,12 +46,8 @@ config(function ($routeProvider, $sceDelegateProvider, WorkoutServiceProvider) {
         topNav: 'partials/workoutbuilder/top-nav.html',
         resolve: {
             selectedWorkout: ['WorkoutBuilderService', '$route', '$location', function (WorkoutBuilderService, $route, $location) {
-                var workout = WorkoutBuilderService.startBuilding($route.current.params.id);
-                if (!workout) {
-                    $location.path('/builder/workouts');    //If the workout not found redirect to workout list
-                }
-                return workout;
-            }],
+                return WorkoutBuilderService.startBuilding($route.current.params.id);
+            }]
         }
     });
     $routeProvider.when('/builder/exercises/new', {

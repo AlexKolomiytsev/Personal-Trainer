@@ -33,7 +33,7 @@
         </div>
         <div id="exercise-video" class="col-sm-3">
             <div class="form-group row">
-                <img id="img-preview" ng-src="{{exercise.image ? exercise.image : '/img/running.png'}}" style="width:250px;height:250px" /><br />
+                <img id="img-preview" ng-src="{{exercise.image ? exercise.image : 'img/running.png'}}" style="width:250px;height:250px" /><br />
                 <label for="exercise-image">Exercise Image (Will be scaled to: 540 X 360 px):</label>
                 <input type="text" name="image" class="form-control" id="exercise-image" placeholder="Enter exercise image url." ng-model="exercise.image">
             </div>
@@ -67,7 +67,7 @@
     <div class="exercise tile">
         <div><span>{{$index+1}}</span></div>
         <div>
-            <img ng-src="{{exercise.details.image ? exercise.details.image : '/img/running.png'}}" style="width:75px;height:75px" />
+            <img ng-src="{{exercise.details.image ? exercise.details.image : 'img/running.png'}}" style="width:75px;height:75px" />
             <div>{{exercise.details.title}}</div>
             <div title="{{exercise.details.description}}">{{exercise.details.description | limitTo:25}}</div>
             <ng-form name="formDuration">
