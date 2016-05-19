@@ -2,10 +2,12 @@
  * Created by sanya on 05.05.2016.
  */
 angular.module('app').
-config(function ($routeProvider, $sceDelegateProvider, WorkoutServiceProvider) {
+config(function ($routeProvider, $sceDelegateProvider, WorkoutServiceProvider, ApiKeyAppenderInterceptorProvider, $httpProvider) {
 
-    // IMPORTANT: Set the database name and API Key here before running the application
-    WorkoutServiceProvider.configure("personaltrainerdb", "dxutsfn8IwNW0usGzQ6nSiOaL4bLCpM1");
+    ApiKeyAppenderInterceptorProvider.setApikey("dxutsfn8IwNW0usGzQ6nSiOaL4bLCpM1");
+    $httpProvider.interceptors.push('ApiKeyAppenderInterceptor');
+    
+    WorkoutServiceProvider.configure("personaltrainerdb");
 
 
     $routeProvider.when('/start', { templateUrl: 'partials/start.html' });
@@ -44,6 +46,7 @@ config(function ($routeProvider, $sceDelegateProvider, WorkoutServiceProvider) {
         leftNav: 'partials/workoutbuilder/left-nav-exercises.html',
         controller: 'WorkoutDetailController',
         topNav: 'partials/workoutbuilder/top-nav.html',
+        routeErrorMessage: "404! Could not load the specific workout!",
         resolve: {
             selectedWorkout: ['WorkoutBuilderService', '$route', '$location', function (WorkoutBuilderService, $route, $location) {
                 return WorkoutBuilderService.startBuilding($route.current.params.id);

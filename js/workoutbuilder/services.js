@@ -78,6 +78,7 @@ angular.module('WorkoutBuilder')
             else {
                 buildingExercise = new Exercise({});
                 newExercise = true;
+                //return $q.when(buildingExercise);
             }
             return buildingExercise;
         };
@@ -102,11 +103,11 @@ angular.module('WorkoutBuilder')
 
         service.canDeleteExercise = function () {
             return !newExercise;
-        }
+        };
 
         service.deleteVideo = function (index) {
             if (index >= 0) buildingExercise.related.videos.splice(index, 1);
-        }
+        };
 
         return service;
     }]);
