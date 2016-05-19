@@ -43,6 +43,7 @@ angular.module('app')
                         angular.forEach(response[1].data.exercises, function (exercise) {
                             exercise.details = allExercises.filter(function (e) { return e.name === exercise.name; })[0];
                         });
+                        
                         return workout;
                     });
             };

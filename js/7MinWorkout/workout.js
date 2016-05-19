@@ -3,8 +3,11 @@
 /* Controllers */
 
 angular.module('7minWorkout')
-  .controller('WorkoutController', ['$scope', '$interval', '$location', 'workoutHistoryTracker', 'appEvents', function ($scope, $interval, $location, workoutHistoryTracker, appEvents) {
-      function WorkoutPlan(args) {
+  .controller('WorkoutController', ['$scope', '$interval', '$location', 'workoutHistoryTracker', 'appEvents', 'selectedWorkout',
+      function ($scope, $interval, $location, workoutHistoryTracker, appEvents, selectedWorkout) {
+          
+
+      /*    function WorkoutPlan(args) {
           this.exercises = [];
           this.name = args.name;
           this.title = args.title;
@@ -17,7 +20,7 @@ angular.module('7minWorkout')
               });
               return this.restBetweenExercise * (this.exercises.length - 1) + total;
           }
-      };
+      };*/
 
       function Exercise(args) {
           this.name = args.name;
@@ -136,7 +139,9 @@ angular.module('7minWorkout')
       //});
 
       var createWorkout = function () {
-          var workout = new WorkoutPlan({
+          var workout = selectedWorkout;
+
+          /*var workout = new WorkoutPlan({
               name: "7minWorkout",
               title: "7 Minute Workout",
               restBetweenExercise: 10
@@ -320,7 +325,7 @@ angular.module('7minWorkout')
                               Keep your hips square and your neck in line with your spine. Hold the position."
               }),
               duration: 30
-          });
+          });*/
           return workout;
       }
 

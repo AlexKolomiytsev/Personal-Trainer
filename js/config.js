@@ -10,9 +10,26 @@ config(function ($routeProvider, $sceDelegateProvider, WorkoutServiceProvider, A
     WorkoutServiceProvider.configure("personaltrainerdb");
 
 
-    $routeProvider.when('/start', { templateUrl: 'partials/start.html' });
-    $routeProvider.when('/workout', { templateUrl: 'partials/workout.html', controller: 'WorkoutController' });
-    $routeProvider.when('/finish', { templateUrl: 'partials/finish.html' });
+    $routeProvider.when('/start', { 
+        templateUrl: 'partials/start.html',
+        controller: 'WorkoutListController'
+    });
+    /*$routeProvider.when('/workout', {
+        templateUrl: 'partials/workout.html', 
+        controller: 'WorkoutController' 
+    });*/
+    $routeProvider.when('/workout/:id', {
+        templateUrl: 'partials/workout.html',
+        controller: 'WorkoutController',
+        resolve: {
+            selectedWorkout: ['WorkoutRunnerService', '$route', function (WorkoutRunnerService, $route) {
+                return WorkoutRunnerService.startRunning($route.current.params.id)
+            }]
+        }
+    });
+    $routeProvider.when('/finish', { 
+        templateUrl: 'partials/finish.html' 
+    });
 
     $routeProvider.when('/builder', {
         redirectTo: '/builder/workouts'

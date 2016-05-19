@@ -284,6 +284,7 @@ div[ng-view].ng-leave-active {
     color: white;
     padding:10px;
     margin-bottom:10px;
+    cursor: pointer;
 }
 .workout.tile:hover{
     background:#1D89CF;

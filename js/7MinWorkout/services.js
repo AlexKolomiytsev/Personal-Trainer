@@ -44,7 +44,25 @@ angular.module('7minWorkout')
         return service;
     }]);
 
+angular.module('WorkoutBuilder')
+    .factory('WorkoutRunnerService', ['WorkoutService', 'WorkoutPlan', 'Exercise', '$q', function (WorkoutService, WorkoutPlan, Exercise, $q) {
+        var service = {};
+        var runnigWorkout;
+        
+        service.startRunning = function (name) {
+            if(name) {
+                return WorkoutService.getWorkout(name).then(function (workout) {
+                    runnigWorkout = workout;
+                    return runnigWorkout;
+                })
+            }
+        };
+        
+        return service;
+    }]);
+
 angular.module('7minWorkout')
     .value("appEvents", {
         workout: { exerciseStarted: "event:workout:exerciseStarted" }
     });
+

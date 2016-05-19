@@ -4,7 +4,10 @@ angular.module('WorkoutBuilder')
     .controller('WorkoutListController', ['$scope', 'WorkoutService', '$location', function ($scope, WorkoutService, $location) {
         $scope.goto = function (workout) {
             $location.path('/builder/workouts/' + workout.name);
-        }
+        };
+        $scope.runWorkout = function (workout) {
+            $location.path('/workout/' + workout.name);  
+        };
         var init = function () {
             WorkoutService.getWorkouts().then(function (data) {
                 $scope.workouts = data;
