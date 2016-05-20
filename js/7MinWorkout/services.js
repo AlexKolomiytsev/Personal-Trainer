@@ -11,7 +11,7 @@ angular.module('7minWorkout')
 
         service.startTracking = function () {
             currentWorkoutLog = { startedOn: new Date().toISOString(), completed: false, exercisesDone: 0 };
-            if (workoutHistory.length >= maxHistoryItems) {     
+            if (workoutHistory.length >= maxHistoryItems) {
                 workoutHistory.shift();
             }
             workoutHistory.push(currentWorkoutLog);
@@ -48,7 +48,7 @@ angular.module('WorkoutBuilder')
     .factory('WorkoutRunnerService', ['WorkoutService', 'WorkoutPlan', 'Exercise', '$q', function (WorkoutService, WorkoutPlan, Exercise, $q) {
         var service = {};
         var runnigWorkout;
-        
+
         service.startRunning = function (name) {
             if(name) {
                 return WorkoutService.getWorkout(name).then(function (workout) {
@@ -57,7 +57,7 @@ angular.module('WorkoutBuilder')
                 })
             }
         };
-        
+
         return service;
     }]);
 
