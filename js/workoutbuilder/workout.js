@@ -17,7 +17,21 @@ angular.module('WorkoutBuilder')
     }]);
 
 angular.module('WorkoutBuilder')
-    .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout', '$location', '$routeParams', function ($scope, WorkoutBuilderService, selectedWorkout, $location, $routeParams) {
+    .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout', '$location', '$routeParams', 'WorkoutService', '$q',
+        function ($scope, WorkoutBuilderService, selectedWorkout, $location, $routeParams, WorkoutService, $q) {
+        $scope.uniqueUserName = function (value) {
+            if (!value || value === $routeParams.id) return $q.when(true);
+            return WorkoutService.getWorkout(value.toLowerCase())
+                .then(
+                    function (data) {
+                        return $q.reject();
+                    },
+                    function (error) {
+                        console.log("this workout is not consist in db");
+                        return true;
+                    });
+        };
+        
         $scope.removeExercise = function (exercise) {
             WorkoutBuilderService.removeExercise(exercise);
         };
@@ -34,7 +48,7 @@ angular.module('WorkoutBuilder')
 
         $scope.$watch('formWorkout.exerciseCount', function (newValue) {
             if (newValue) {
-                newValue.$setValidity("count", $scope.workout.exercises.length > 0);
+                newValue.$setValidity("count", $scope.workout.exercises.length > 0); //устанавливает валидатор count, если второй параметр false - ошибка.
             }
         });
 
