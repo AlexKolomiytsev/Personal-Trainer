@@ -9,11 +9,11 @@ angular.module('WorkoutBuilder')
        }
     });
 
-
 /*
 angular.module('app').directive('remoteValidator', ['$parse', function ($parse) {
     return {
         require: 'ngModel', //dependency on --mg-model-- directive
+        priority: 5,
         //ngModelCtrl - requiered directive controller (зависимость директивы, на самом деле - зависимость контроллера директивы)
         link: function (scope, elm, attr, ngModelCtrl) {
             var expfn = $parse(attr["remoteValidatorFunction"]); //$parse - traslate string into a function
@@ -33,15 +33,29 @@ angular.module('app').directive('remoteValidator', ['$parse', function ($parse) 
     }
 }]);*/
 
-angular.module('app').directive('remoteValidator', ['$parse', function ($parse) {
+angular.module('WorkoutBuilder').directive('remoteValidator', ['$parse', function ($parse) {
     return {
-        require: 'ngModel',
-        link: function (scope, elem, attr, ngModelCtrl) {
+        require: ['ngModel','?^busyIndicator'], //?^ search for dependency on the parent HTML tree.
+        priority: 5,
+        link: function (scope, elem, attr, ctrls) {
             var expfn = $parse(attr['remoteValidatorFunction']);
             var validatorName = attr['remoteValidator'];
+            var ngModelCtrl = ctrls[0];
+            var busyIndicator = ctrls[1];
             ngModelCtrl.$asyncValidators[validatorName] = function (value) {
                 return expfn(scope, { 'value': value });
+            }
+            if (busyIndicator) {
+                //$pending отображает состояние асинхронной валидации, зарегистсрированной на $asyncValidators
+                scope.$watch(function () {return ngModelCtrl.$pending;}, function (newValue) {
+                    if (newValue && newValue[validatorName]) {
+                        busyIndicator.show();
+                    } else {
+                        busyIndicator.hide();
+                    }
+                });
             }
         }
     };
 }]);
+
