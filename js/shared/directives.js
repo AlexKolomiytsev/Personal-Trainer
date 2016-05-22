@@ -20,10 +20,18 @@ angular.module('app').directive('ngConfirm', [function () {
 angular.module('app').directive('busyIndicator', ['$compile', function ($compile) {
     return {
         scope: true, //causes a new scope to be created when the directive is executed and link function is called
-        link: function (scope, element, attr) {
+        /*link: function (scope, element, attr) {
             var linkfn = $compile('<div><label ng-show="busy" class="text-info glyphicon glyphicon-refresh spin"></label></div>');
             element.append(linkfn(scope));
-        },
+        },*/
+        /*compile: function (element, attr) {
+            var busyHtml = '<div><label ng-show="busy" class="text-info glyphicon glyphicon-refresh spin"></label></div>';
+            element.append(busyHtml);
+        },*/
+
+        transclude: true,
+        template: '<div><div ng-transclude=""></div><label ng-show="busy" class="text-info glyphicon glyphicon-refresh spin"></label></div>',
+        
         //directive controller function is used for inter-directive communications
         controller: ['$scope', function ($scope) {
             this.show = function () {
