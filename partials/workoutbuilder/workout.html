@@ -58,8 +58,11 @@
                 <p class="form-control-static badge">{{workout.totalWorkoutDuration()|secondsToTime}}</p>
             </div>
             <div class="row">
-                <button class="btn pull-right btn-block" ng-class="{'btn-default':formWorkout.$valid,'btn-warning':!formWorkout.$valid}" ng-click="save()"
-                        popover="{{formWorkout.$invalid ? 'The form has errors.' : null}}" popover-trigger="mouseenter">Save</button>
+                <ajax-button submitting="{{submitted}}" class="btn pull-right btn-block" ng-class="{'btn-default':formWorkout.$valid,'btn-warning':!formWorkout.$valid}" on-click="save()">
+                        <span popover="{{formWorkout.$invalid ? 'The form has errors.' : null}}" popover-trigger="mouseenter">
+                            Save
+                        </span>
+                </ajax-button>
                 <button class="btn btn-primary pull-right" ng-click="reset()">Reset</button>
             </div>
         </div>
