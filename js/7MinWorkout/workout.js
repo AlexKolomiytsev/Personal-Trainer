@@ -34,9 +34,13 @@ angular.module('7minWorkout')
                   }
               });
           };
-        $scope.carouselOptions = {
-            slideSpeed: 2000
-        };
+          $scope.carouselOptions = {
+              slideSpeed: 2000
+          };
+
+          $scope.imageUpdated = function (imageIndex) {
+              console.log($scope.exerciseImages[imageIndex]);
+          };
 
       //for Owl Carousel -- end --
       function Exercise(args) {
