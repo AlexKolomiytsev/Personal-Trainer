@@ -22,6 +22,23 @@ angular.module('7minWorkout')
           }
       };*/
 
+
+      //for Owl Carousel -- start --
+          var fillImages = function () {
+              $scope.exerciseImages = [];
+
+              angular.forEach($scope.workoutPlan.exercises, function (exercise, index) {
+                  $scope.exerciseImages.push(exercise.details.image);
+                  if (index < $scope.workoutPlan.exercises.length - 1) {
+                      $scope.exerciseImages.push("img/rest.png");
+                  }
+              });
+          };
+        $scope.carouselOptions = {
+            slideSpeed: 2000
+        };
+
+      //for Owl Carousel -- end --
       function Exercise(args) {
           this.name = args.name;
           this.title = args.title;
@@ -49,6 +66,7 @@ angular.module('7minWorkout')
           };
           workoutHistoryTracker.startTracking();
           $scope.currentExerciseIndex = -1;
+          fillImages();
           startExercise($scope.workoutPlan.exercises[0]);
       };
 
@@ -104,6 +122,7 @@ angular.module('7minWorkout')
           promise.then(function () {
               var next = getNextExercise($scope.currentExercise);
               if (next) {
+                  $scope.carousel.next();
                   startExercise(next);
               }
               else {
